@@ -1,4 +1,4 @@
-﻿namespace ArvoreAVL
+﻿namespace AVLTree
 {
     public class Node
     {

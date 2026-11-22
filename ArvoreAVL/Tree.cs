@@ -1,6 +1,4 @@
-﻿using ArvoreAVL;
-
-namespace AVL_Tree
+﻿namespace AVLTree
 {
     public class Tree
     {
