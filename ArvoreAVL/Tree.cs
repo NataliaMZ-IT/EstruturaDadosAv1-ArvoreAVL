@@ -1,10 +1,30 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace AVLTree
+﻿namespace AVLTree
 {
     public class Tree(int value)
     {
         public Node? RootNode { get; set; } = new Node(value);
+
+        private int GetNodeHeight(Node? node)
+        {
+            return node is not null ? node.Height : 0;
+        }
+
+        private void UpdateNodeHeight(Node node)
+        {
+            if (node is null) return;
+
+            node.Height = 1 + Math.Max(
+                GetNodeHeight(node.LeftNode), 
+                GetNodeHeight(node.RightNode)
+            );
+        }
+
+        private int GetBalanceFactor(Node node)
+        {
+            if (node is null) return 0;
+
+            return GetNodeHeight(node.LeftNode) - GetNodeHeight(node.RightNode);
+        }
 
         public Node Insert(Node? pointerNode, int value)
         {
