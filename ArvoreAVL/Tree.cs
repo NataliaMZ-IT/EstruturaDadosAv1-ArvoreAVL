@@ -26,6 +26,35 @@
             return GetNodeHeight(node.LeftNode) - GetNodeHeight(node.RightNode);
         }
 
+        private Node RightRotation(Node node)
+        {
+            Node newRoot = node.LeftNode;
+            Node? aux = newRoot.RightNode;
+
+            newRoot.RightNode = node;
+            node.LeftNode = aux;
+
+            UpdateNodeHeight(node);
+            UpdateNodeHeight(newRoot);
+
+            return node;
+        }
+
+        private Node LeftRotation(Node node)
+        {
+            Node newRoot = node.RightNode;
+            Node? aux = newRoot.LeftNode;
+
+            newRoot.LeftNode = node;
+            node.RightNode = aux;
+
+            UpdateNodeHeight(node);
+            UpdateNodeHeight(newRoot);
+
+            return node;
+        }
+
+
         public Node Insert(Node? pointerNode, int value)
         {
             if (pointerNode is null)
@@ -41,7 +70,7 @@
             {
                 pointerNode.RightNode = Insert(pointerNode.RightNode, value);
             }
-                
+
             return pointerNode;
         }
 
