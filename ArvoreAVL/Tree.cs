@@ -163,5 +163,28 @@
 
             return Balance(currentNode);
         }
+
+        public void PrintTree()
+        {
+            PrintTree(RootNode, 0);
+        }
+
+        private void PrintTree(Node currentNode, int level)
+        {
+            if (currentNode == null)
+                return;
+
+            // Print the right subtree
+            PrintTree(currentNode.RightNode, level + 1);
+
+            // Indentation based on the tree level
+            Console.WriteLine(
+                new string(' ', level * 4) + currentNode.Value
+            );
+
+            // Print the left subtree
+            PrintTree(currentNode.LeftNode, level + 1);
+        }
+
     }
 }
