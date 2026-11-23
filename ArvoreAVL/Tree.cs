@@ -54,6 +54,37 @@
             return newRoot;
         }
 
+        private Node Balance(Node node)
+        {
+            UpdateNodeHeight(node);
+
+            int balanceFactor = GetBalanceFactor(node);
+
+            // Simple Right Rotation (LL)
+            if (balanceFactor > 1 && GetBalanceFactor(node.LeftNode) >= 0)
+                return RightRotation(node);
+
+            // Simple Left Rotation (RR)
+            if (balanceFactor < -1 && GetBalanceFactor(node.RightNode) <= 0)
+                return LeftRotation(node);
+
+            // Right Rotation on the SubRoot then Left Rotation (RL)
+            if (balanceFactor < -1 && GetBalanceFactor(node.RightNode) > 0)
+            {
+                node.RightNode = RightRotation(node.RightNode);
+                return LeftRotation(node);
+            }
+
+            // Left Rotation on the SubRoot then Right Rotation (LR)
+            if (balanceFactor > 1 && GetBalanceFactor(node.LeftNode) < 0)
+            {
+                node.LeftNode = LeftRotation(node.LeftNode);
+                return RightRotation(node);
+            }
+
+            return node;
+        }
+
         public void Insert(int value)
         {
             var newRootNode = Insert(RootNode, value);
@@ -78,33 +109,7 @@
                 currentNode.RightNode = Insert(currentNode.RightNode, value);
             }
 
-            UpdateNodeHeight(currentNode);
-
-            int balanceFactor = GetBalanceFactor(currentNode);
-
-            // Simple Right Rotation (LL)
-            if (balanceFactor > 1 && value < currentNode.LeftNode.Value)
-                return RightRotation(currentNode);
-
-            // Simple Left Rotation (RR)
-            if (balanceFactor < -1 && value > currentNode.RightNode.Value)
-                return LeftRotation(currentNode);
-
-            // Right Rotation on the SubRoot then Left Rotation (RL)
-            if (balanceFactor < -1 && value < currentNode.RightNode.Value)
-            {
-                currentNode.RightNode = RightRotation(currentNode.RightNode);
-                return LeftRotation(currentNode);
-            }
-
-            // Left Rotation on the SubRoot then Right Rotation (LR)
-            if (balanceFactor > 1 && value > currentNode.LeftNode.Value)
-            {
-                currentNode.LeftNode = LeftRotation(currentNode.LeftNode);
-                return RightRotation(currentNode);
-            }
-
-            return currentNode;
+            return Balance(currentNode);
         }
 
         public void Delete(int value)
@@ -156,33 +161,7 @@
                 }
             }
 
-            UpdateNodeHeight(currentNode);
-
-            int balanceFactor = GetBalanceFactor(currentNode);
-
-            // Simple Right Rotation (LL)
-            if (balanceFactor > 1 && GetBalanceFactor(currentNode.LeftNode) >= 0)
-                return RightRotation(currentNode);
-
-            // Simple Left Rotation (RR)
-            if (balanceFactor < -1 && GetBalanceFactor(currentNode.RightNode) <= 0)
-                return LeftRotation(currentNode);
-
-            // Right Rotation on the SubRoot then Left Rotation (RL)
-            if (balanceFactor < -1 && GetBalanceFactor(currentNode.RightNode) > 0)
-            {
-                currentNode.RightNode = RightRotation(currentNode.RightNode);
-                return LeftRotation(currentNode);
-            }
-
-            // Left Rotation on the SubRoot then Right Rotation (LR)
-            if (balanceFactor > 1 && GetBalanceFactor(currentNode.LeftNode) < 0)
-            {
-                currentNode.LeftNode = LeftRotation(currentNode.LeftNode);
-                return RightRotation(currentNode);
-            }
-
-            return currentNode;
+            return Balance(currentNode);
         }
     }
 }
