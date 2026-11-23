@@ -37,7 +37,7 @@
             UpdateNodeHeight(node);
             UpdateNodeHeight(newRoot);
 
-            return node;
+            return newRoot;
         }
 
         private Node LeftRotation(Node node)
@@ -51,9 +51,8 @@
             UpdateNodeHeight(node);
             UpdateNodeHeight(newRoot);
 
-            return node;
+            return newRoot;
         }
-
 
         public Node Insert(Node? pointerNode, int value)
         {
