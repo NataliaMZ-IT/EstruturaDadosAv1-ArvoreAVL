@@ -107,6 +107,14 @@
             return currentNode;
         }
 
+        public void Delete(int value)
+        {
+            var newRootNode = Delete(RootNode, value);
+
+            if (newRootNode != RootNode)
+                RootNode = newRootNode;
+        }
+
         private Node? Delete(Node? currentNode, int value)
         {
             if (currentNode is null)
@@ -146,6 +154,32 @@
 
                     currentNode.RightNode = Delete(currentNode.RightNode, aux.Value);
                 }
+            }
+
+            UpdateNodeHeight(currentNode);
+
+            int balanceFactor = GetBalanceFactor(currentNode);
+
+            // Simple Right Rotation (LL)
+            if (balanceFactor > 1 && GetBalanceFactor(currentNode.LeftNode) >= 0)
+                return RightRotation(currentNode);
+
+            // Simple Left Rotation (RR)
+            if (balanceFactor < -1 && GetBalanceFactor(currentNode.RightNode) <= 0)
+                return LeftRotation(currentNode);
+
+            // Right Rotation on the SubRoot then Left Rotation (RL)
+            if (balanceFactor < -1 && GetBalanceFactor(currentNode.RightNode) > 0)
+            {
+                currentNode.RightNode = RightRotation(currentNode.RightNode);
+                return LeftRotation(currentNode);
+            }
+
+            // Left Rotation on the SubRoot then Right Rotation (LR)
+            if (balanceFactor > 1 && GetBalanceFactor(currentNode.LeftNode) < 0)
+            {
+                currentNode.LeftNode = LeftRotation(currentNode.LeftNode);
+                return RightRotation(currentNode);
             }
 
             return currentNode;
