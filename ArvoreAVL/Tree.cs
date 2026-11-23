@@ -54,7 +54,15 @@
             return newRoot;
         }
 
-        public Node Insert(Node? pointerNode, int value)
+        public void Insert(int value)
+        {
+            var newRootNode = Insert(RootNode, value);
+
+            if (RootNode != newRootNode)
+                RootNode = newRootNode;
+        }
+
+        private Node Insert(Node? pointerNode, int value)
         {
             if (pointerNode is null)
             {
@@ -68,6 +76,32 @@
             else if (pointerNode.Value < value)
             {
                 pointerNode.RightNode = Insert(pointerNode.RightNode, value);
+            }
+
+            UpdateNodeHeight(pointerNode);
+
+            int balanceFactor = GetBalanceFactor(pointerNode);
+
+            // Simple Right Rotation (LL)
+            if (balanceFactor > 1 && value < pointerNode.LeftNode.Value)
+                return RightRotation(pointerNode);
+
+            // Simple Left Rotation (RR)
+            if (balanceFactor < -1 && value > pointerNode.RightNode.Value)
+                return LeftRotation(pointerNode);
+
+            // Right Rotation on the SubRoot then Left Rotation (RL)
+            if (balanceFactor < -1 && value < pointerNode.RightNode.Value)
+            {
+                pointerNode.RightNode = RightRotation(pointerNode.RightNode);
+                return LeftRotation(pointerNode);
+            }
+
+            // Left Rotation on the SubRoot then Right Rotation (LR)
+            if (balanceFactor > 1 && value > pointerNode.LeftNode.Value)
+            {
+                pointerNode.LeftNode = LeftRotation(pointerNode.LeftNode);
+                return RightRotation(pointerNode);
             }
 
             return pointerNode;
