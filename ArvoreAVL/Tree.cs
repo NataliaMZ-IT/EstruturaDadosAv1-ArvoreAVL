@@ -62,93 +62,93 @@
                 RootNode = newRootNode;
         }
 
-        private Node Insert(Node? pointerNode, int value)
+        private Node Insert(Node? currentNode, int value)
         {
-            if (pointerNode is null)
+            if (currentNode is null)
             {
                 return new Node(value);
             }
 
-            if (pointerNode.Value > value)
+            if (currentNode.Value > value)
             {
-                pointerNode.LeftNode = Insert(pointerNode.LeftNode, value);
+                currentNode.LeftNode = Insert(currentNode.LeftNode, value);
             }
-            else if (pointerNode.Value < value)
+            else if (currentNode.Value < value)
             {
-                pointerNode.RightNode = Insert(pointerNode.RightNode, value);
+                currentNode.RightNode = Insert(currentNode.RightNode, value);
             }
 
-            UpdateNodeHeight(pointerNode);
+            UpdateNodeHeight(currentNode);
 
-            int balanceFactor = GetBalanceFactor(pointerNode);
+            int balanceFactor = GetBalanceFactor(currentNode);
 
             // Simple Right Rotation (LL)
-            if (balanceFactor > 1 && value < pointerNode.LeftNode.Value)
-                return RightRotation(pointerNode);
+            if (balanceFactor > 1 && value < currentNode.LeftNode.Value)
+                return RightRotation(currentNode);
 
             // Simple Left Rotation (RR)
-            if (balanceFactor < -1 && value > pointerNode.RightNode.Value)
-                return LeftRotation(pointerNode);
+            if (balanceFactor < -1 && value > currentNode.RightNode.Value)
+                return LeftRotation(currentNode);
 
             // Right Rotation on the SubRoot then Left Rotation (RL)
-            if (balanceFactor < -1 && value < pointerNode.RightNode.Value)
+            if (balanceFactor < -1 && value < currentNode.RightNode.Value)
             {
-                pointerNode.RightNode = RightRotation(pointerNode.RightNode);
-                return LeftRotation(pointerNode);
+                currentNode.RightNode = RightRotation(currentNode.RightNode);
+                return LeftRotation(currentNode);
             }
 
             // Left Rotation on the SubRoot then Right Rotation (LR)
-            if (balanceFactor > 1 && value > pointerNode.LeftNode.Value)
+            if (balanceFactor > 1 && value > currentNode.LeftNode.Value)
             {
-                pointerNode.LeftNode = LeftRotation(pointerNode.LeftNode);
-                return RightRotation(pointerNode);
+                currentNode.LeftNode = LeftRotation(currentNode.LeftNode);
+                return RightRotation(currentNode);
             }
 
-            return pointerNode;
+            return currentNode;
         }
 
-        public Node? Delete(Node? pointerNode, int value)
+        private Node? Delete(Node? currentNode, int value)
         {
-            if (pointerNode is null)
+            if (currentNode is null)
             {
                 return null;
             }
 
-            if (pointerNode.Value > value)
+            if (currentNode.Value > value)
             {
-                pointerNode.LeftNode = Delete(pointerNode.LeftNode, value);
+                currentNode.LeftNode = Delete(currentNode.LeftNode, value);
             }
-            else if (pointerNode.Value < value)
+            else if (currentNode.Value < value)
             {
-                pointerNode.RightNode = Delete(pointerNode.RightNode, value);
+                currentNode.RightNode = Delete(currentNode.RightNode, value);
             }
             else
             {
                 // Case 1 and 2: No children or one child
-                if (pointerNode.LeftNode is null)
+                if (currentNode.LeftNode is null)
                 {
-                    return pointerNode.RightNode;
+                    return currentNode.RightNode;
                 }
-                else if (pointerNode.RightNode is null)
+                else if (currentNode.RightNode is null)
                 {
-                    return pointerNode.LeftNode;
+                    return currentNode.LeftNode;
                 }
 
                 // Case 3: Two children
                 else
                 {
                     // Looking for the lowest value to substitute the node to be deleted
-                    Node aux = pointerNode.RightNode;
+                    Node aux = currentNode.RightNode;
                     while(aux.LeftNode is not null)
                         aux = aux.LeftNode;
 
-                    pointerNode.Value = aux.Value;
+                    currentNode.Value = aux.Value;
 
-                    pointerNode.RightNode = Delete(pointerNode.RightNode, aux.Value);
+                    currentNode.RightNode = Delete(currentNode.RightNode, aux.Value);
                 }
             }
 
-            return pointerNode;
+            return currentNode;
         }
     }
 }
